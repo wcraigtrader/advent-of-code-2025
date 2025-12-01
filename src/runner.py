@@ -5,7 +5,7 @@ import sys
 import time
 
 from math import isnan, nan
-from typing import Any, Optional, IO
+from typing import Any, Optional, IO, Callable
 
 IGNORE: float = nan
 
@@ -76,6 +76,9 @@ class Puzzle:
         """Read a data file, splitting on a seperator"""
 
         return self.read_blob(filename).strip().split(sep)
+
+    def read_parsed(self, filename: str, function: Callable) -> Data:
+        return list(map(function, self.read_stripped(filename)))
 
     def read_bytes(self, filename: str) -> Data:
         with self.open(filename, 'rb') as df:
