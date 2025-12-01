@@ -6,12 +6,12 @@ Implementation language is Python 3. My personal goal is to write well-structure
 
 Run each puzzle like this:
 ```shell
-PYTHONPATH=src python3 src/day01/puzzle01.py
+make day01
 ```
 
 Run all puzzles like this:
 ```shell
-bash run_all.sh
+make
 ```
 
 ## Solving puzzles
@@ -33,7 +33,7 @@ bash run_all.sh
       def part2(self, data: Data) -> PuzzleResult:
           return 0
 
-   puzzle = Day09()
+   puzzle = DayXX()
    puzzle.run()
    ```
 1. The constuctor is used to define the data files. The first argument is the actual data file name; subsequent arguments are for test data file names. If called without arguments, it defaults to `'real.data', 'test.data'`.
