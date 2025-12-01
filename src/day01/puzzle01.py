@@ -20,7 +20,7 @@ class Rotation:
 
 
 class Day01(Puzzle):
-    """Solution for day 01"""
+    """Solution for day 01 (Secret Entrance)"""
 
     def parse_data(self, filename: str) -> Data:
         return [Rotation.parse(line) for line in self.read_stripped(filename)]
