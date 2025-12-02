@@ -30,21 +30,19 @@ class Day02(Puzzle):
         data: list[Range] = list(map(Range.parse, self.read_split(filename, ',')))
         return data
 
-    def part1(self, data: Data) -> PuzzleResult:
+    def sum_matches(self, pattern: str, data: Data) -> PuzzleResult:
         def match(number: int) -> bool:
-            return re.fullmatch(r'([1-9][0-9]*)\1', str(number)) is not None
+            return re.fullmatch(pattern, str(number)) is not None
 
         ranges: list[range] = [d.range for d in data]
         matches: list[list[int]] = [list(filter(match, r)) for r in ranges]
         return sum([x for mlist in matches for x in mlist])
+
+    def part1(self, data: Data) -> PuzzleResult:
+        return self.sum_matches(r'([1-9][0-9]*)(\1)', data)
 
     def part2(self, data: Data) -> PuzzleResult:
-        def match(number: int) -> bool:
-            return re.fullmatch(r'([1-9][0-9]*)(\1)+', str(number)) is not None
-
-        ranges: list[range] = [d.range for d in data]
-        matches: list[list[int]] = [list(filter(match, r)) for r in ranges]
-        return sum([x for mlist in matches for x in mlist])
+        return self.sum_matches(r'([1-9][0-9]*)(\1)+', data)
 
 
 puzzle = Day02()
