@@ -18,10 +18,10 @@ class Day03(Puzzle):
     @staticmethod
     def joltage(batteries: str, count: int) -> int:
         result: str = ''
-        pos = 0
+        divider: int = 0
         for end in range(len(batteries)-count+1, len(batteries)+1):
-            biggest: str = max(batteries[pos:end])
-            pos: int = batteries.index(biggest, pos, end) + 1
+            biggest: str = max(batteries[divider:end])
+            divider = batteries.index(biggest, divider, end) + 1
             result = result + biggest
         return int(result)
 
