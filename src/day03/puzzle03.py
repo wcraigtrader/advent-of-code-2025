@@ -10,20 +10,20 @@ class Day03(Puzzle):
         return self.read_stripped(filename)
 
     def part1(self, data: Data) -> PuzzleResult:
-        return sum(self.rating(batteries, 2) for batteries in data)
+        return sum(self.joltage(batteries, 2) for batteries in data)
 
     def part2(self, data: Data) -> PuzzleResult:
-        return sum(self.rating(batteries, 12) for batteries in data)
+        return sum(self.joltage(batteries, 12) for batteries in data)
 
     @staticmethod
-    def rating(batteries: str, count: int) -> int:
-        value = 0
+    def joltage(batteries: str, count: int) -> int:
+        result: str = ''
         pos = 0
         for end in range(len(batteries)-count+1, len(batteries)+1):
             biggest: str = max(batteries[pos:end])
             pos: int = batteries.index(biggest, pos, end) + 1
-            value: int = value * 10 + int(biggest)
-        return value
+            result = result + biggest
+        return int(result)
 
 
 puzzle = Day03()
