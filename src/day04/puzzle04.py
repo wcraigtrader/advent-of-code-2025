@@ -24,7 +24,7 @@ class Rolls(Grid):
     def remove_accessible(self) -> int:
         positions: list[GridPosition] = self.accessible
         for pos in positions:
-            self[pos] = 0
+            del self[pos]
         return len(positions)
 
     @staticmethod
@@ -39,10 +39,12 @@ class Day04(Puzzle):
         return Rolls(self.read_stripped(filename))
 
     def part1(self, data: Rolls) -> PuzzleResult:
-        return len(data.accessible)
+        result: int = len(data.accessible)
+        return result
 
     def part2(self, data: Rolls) -> PuzzleResult:
         total = 0
+
         removed: int = data.remove_accessible()
         while removed:
             total += removed
