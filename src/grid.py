@@ -1,10 +1,13 @@
 from __future__ import annotations
 
 from collections.abc import MutableMapping, KeysView, ItemsView, ValuesView
-from typing import Any, Callable, Iterator, Mapping, Optional, cast  # noqa: F401
+from typing import Any, Callable, Iterator, Mapping, Optional, cast, TypeAlias  # noqa: F401
 from math import sqrt
 
-GridPosition = GridDirection = complex
+
+GridPosition: TypeAlias = complex
+GridDirection: TypeAlias = complex
+# GridPosition = GridDirection = complex
 
 NORTH = UP = GridDirection(-1, 0)
 SOUTH = DOWN = GridDirection(1, 0)
