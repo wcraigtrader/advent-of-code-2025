@@ -45,7 +45,7 @@ def GridDiagonalDistance(src: GridPosition, tgt: GridPosition) -> float:
 
 class Grid(MutableMapping):
 
-    _properties = [
+    _properties: list[str] = [
         '_rows',
         '_cols',
         '_offset',
@@ -233,8 +233,7 @@ class Grid(MutableMapping):
         return [self[GridPosition(r, c)] for r in self.row_range]
 
     def inbounds(self, position: GridPosition) -> bool:
-        return (GridRow(position) in self.row_range and
-                GridCol(position) in self.col_range)
+        return (GridRow(position) in self.row_range and GridCol(position) in self.col_range)
 
 
 __all__: list[str] = [
