@@ -44,6 +44,7 @@ def GridDiagonalDistance(src: GridPosition, tgt: GridPosition) -> float:
 
 
 class Grid(MutableMapping):
+    """Two-Dimensional Grid backed by a hash map with complex keys for locations"""
 
     _properties: list[str] = [
         '_rows',
@@ -56,6 +57,23 @@ class Grid(MutableMapping):
     ]
 
     def __init__(self, source: Optional[list[str] | Grid] = None, **keywords) -> None:
+        """
+        Grid constructor
+        
+        :param source: Either a list of strings representing the initial data, or another Grid
+        :type source: Optional[list[str] | Grid]
+        :param keywords: Modify Grid behavior, as follows:
+
+        * sparse: bool = False, If True, then only non-None values will be stored in the Grid.
+        * offset: int = 0, A positive integer, which if set, extends the Grid boundaries in all directions.
+        * origin: str = 'ul', Indicates where the origin of the grid is (ul = Upper Left, ll=Lower Left).
+        * default: Any = None, Value to return for values that aren't represented in a sparse Grid
+        * dynamic: bool = False, If True, Grid boundaries will expand as data is added, otherwise boundaries are fixed.
+        * empty: bool = False, If True, when initializing from another Grid, will start with an empty grid instead of copying data.
+        * transpose: bool = False, If True, when initializing, swap the row and column addresses.
+        * conversion: Callable = None, If set, use this conversion on each element as the Grid is initialized
+        """
+
         self._grid: dict[GridPosition, Any] = {}
 
         self._min_row: int = 1_000_000_000_000
@@ -229,6 +247,10 @@ class Grid(MutableMapping):
     def lines(self) -> list[str]:
         return [self.render_row(r) for r in self.row_range]
 
+    @property
+    def operations(self) -> Mapping:
+        return { 'set': self._setop, 'get': self._getop, 'del': self._delop }
+
     def render(self, value: Any) -> str:
         return ' ' if value is None else str(value)[0]
 
@@ -243,10 +265,6 @@ class Grid(MutableMapping):
 
     def inbounds(self, position: GridPosition) -> bool:
         return (GridRow(position) in self.row_range and GridCol(position) in self.col_range)
-
-    @property
-    def stats(self) -> Mapping:
-        return { 'set': self._setop, 'get': self._getop, 'del': self._delop }
 
 
 __all__: list[str] = [
