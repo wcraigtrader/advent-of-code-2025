@@ -63,6 +63,10 @@ class Grid(MutableMapping):
         self._min_col: int = 1_000_000_000_000
         self._max_col: int = -1_000_000_000_000
 
+        self._getop = 0
+        self._setop = 0
+        self._delop = 0
+
         if source is None:
             self._rows: int = keywords.get('rows', 0)
             self._cols: int = keywords.get('cols', 0)
@@ -120,8 +124,10 @@ class Grid(MutableMapping):
     def __getitem__(self, key: GridPosition) -> Any:
         if isinstance(key, GridPosition):
             if key in self._grid:
+                self._getop += 1
                 return self._grid[key]
             elif self._sparse:
+                self._getop += 1
                 return self._default
             else:
                 raise IndexError
@@ -130,6 +136,7 @@ class Grid(MutableMapping):
     def __setitem__(self, key: GridPosition, value: Any) -> None:
         if isinstance(key, GridPosition):
             self._grid[key] = value
+            self._setop += 1
             if self._dynamic:
                 self._min_row = min(self._min_row, GridRow(key))
                 self._max_row = max(self._max_row, GridRow(key))
@@ -144,8 +151,10 @@ class Grid(MutableMapping):
         if isinstance(key, GridPosition):
             if key in self._grid:
                 del self._grid[key]
+                self._delop += 1
                 return
             elif self._sparse:
+                self._delop += 1
                 return
             else:
                 raise IndexError
@@ -234,6 +243,10 @@ class Grid(MutableMapping):
 
     def inbounds(self, position: GridPosition) -> bool:
         return (GridRow(position) in self.row_range and GridCol(position) in self.col_range)
+
+    @property
+    def stats(self) -> Mapping:
+        return { 'set': self._setop, 'get': self._getop, 'del': self._delop }
 
 
 __all__: list[str] = [
