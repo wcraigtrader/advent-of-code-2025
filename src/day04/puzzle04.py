@@ -29,7 +29,7 @@ class Rolls(Grid):
 
     @staticmethod
     def conversion(ch: str) -> Any:
-        return 1 if ch == '@' else None
+        return None if ch == '.' else 1
 
 
 class Day04(Puzzle):
