@@ -11,8 +11,8 @@ NEIGHBORS: list[GridDirection] = [NORTH, SOUTH, WEST, EAST, NW, NE, SW, SE]
 class Rolls(Grid):
 
     def __init__(self, lines):
-        # Use a sparse grid with a 1-deep border, using 1 for rolls, and 0 for empty spaces
-        super().__init__(lines, sparse=True, offset=1, conversion=self.conversion, default=0)
+        # Use a sparse grid, using 1 for rolls, and 0 for empty spaces
+        super().__init__(lines, sparse=True, conversion=self.conversion, default=0)
 
     def is_accessible(self, position) -> bool:
         return self[position] and (sum([self[position+offset] for offset in NEIGHBORS]) < 4)
