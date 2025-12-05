@@ -32,13 +32,11 @@ class Puzzle:
 
     def __repr__(self) -> str:
         text: str = self.__class__.__name__.replace('Day', 'Day ')
-        if self.__doc__:
-            text = f'{text}: {self.__doc__}'
-        return text
+        return f'{text}: {self.__doc__}' if self.__doc__ else text
 
     # ----- Methods each Puzzle needs to implement ----------------------------
 
-    def parse_data(self, filename) -> Data:
+    def parse_data(self, filename: str) -> Data:
         """Parse a data file, returning data for each part of the puzzle"""
         raise NotImplementedError('parse_data')
 
@@ -77,7 +75,8 @@ class Puzzle:
 
         return self.read_blob(filename).strip().split(sep)
 
-    def get_factory_method(self, factory: Callable) -> Callable:
+    @staticmethod
+    def get_factory_method(factory: Callable) -> Callable:
         if hasattr(factory, 'factory'):
             return factory.factory
         elif hasattr(factory, 'parse'):
