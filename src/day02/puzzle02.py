@@ -18,7 +18,7 @@ class Range:
         return range(self.first, self.last+1)
 
     @classmethod
-    def parse(cls, text: str) -> Range:
+    def factory(cls, text: str) -> Range:
         first, _, last = text.partition('-')
         return cls(int(first), int(last))
 
@@ -27,7 +27,7 @@ class Day02(Puzzle):
     """Solution for day 02 (Gift Shop)"""
 
     def parse_data(self, filename: str) -> Data:
-        data: list[Range] = list(map(Range.parse, self.read_split(filename, ',')))
+        data: list[Range] = list(map(Range.factory, self.read_split(filename, ',')))
         return data
 
     def sum_matches(self, pattern: str, data: Data) -> PuzzleResult:
