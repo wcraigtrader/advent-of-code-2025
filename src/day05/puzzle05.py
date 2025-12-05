@@ -44,6 +44,9 @@ class Inventory:
 
         return cls(ranges, ingredients)
 
+    def __len__(self) -> int:
+        return len(self.ranges)
+
 
 class Day05(Puzzle):
     """Solution for day 05 (Cafeteria)"""
