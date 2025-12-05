@@ -77,13 +77,23 @@ class Puzzle:
 
         return self.read_blob(filename).strip().split(sep)
 
-    def read_parsed(self, filename: str, function: Callable) -> Data:
-        """Read a data file as lines, returning a single object created by function(lines)"""
-        return function(self.read_stripped(filename))
+    def get_factory_method(self, factory: Callable) -> Callable:
+        if hasattr(factory, 'factory'):
+            return factory.factory
+        elif hasattr(factory, 'parse'):
+            return factory.parse
+        else:
+            return factory
 
-    def read_parsed_list(self, filename: str, function: Callable) -> Data:
-        """Read a data file as lines, returning a list of objects created by function(line)"""
-        return list(map(function, self.read_stripped(filename)))
+    def read_factory(self, filename: str, factory: Callable) -> Data:
+        """Read a data file as lines, returning a single object created by the factory"""
+        method: Callable = self.get_factory_method(factory)
+        return method(self.read_stripped(filename))
+
+    def read_factory_list(self, filename: str, factory: Callable) -> Data:
+        """Read a data file as lines, returning a list of objects created by factory"""
+        method: Callable = self.get_factory_method(factory)
+        return list(map(method, self.read_stripped(filename)))
 
     def read_bytes(self, filename: str) -> Data:
         with self.open(filename, 'rb') as df:

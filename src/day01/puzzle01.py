@@ -23,7 +23,7 @@ class Day01(Puzzle):
     """Solution for day 01 (Secret Entrance)"""
 
     def parse_data(self, filename: str) -> Data:
-        return self.read_parsed_list(filename, Rotation.factory)
+        return self.read_factory_list(filename, Rotation.factory)
 
     def part1(self, data: Data) -> PuzzleResult:
         dial: int = 50
