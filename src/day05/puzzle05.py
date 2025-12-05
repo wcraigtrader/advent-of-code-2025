@@ -49,7 +49,7 @@ class Day05(Puzzle):
     """Solution for day 05 (Cafeteria)"""
 
     def parse_data(self, filename: str) -> Data:
-        return self.read_factory(filename, Inventory.factory)
+        return self.read_factory(filename, Inventory)
 
     def part1(self, data: Inventory) -> PuzzleResult:
         result = 0
