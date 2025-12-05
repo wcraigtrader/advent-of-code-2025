@@ -13,7 +13,7 @@ class Rotation:
         return self.rotation if self.direction == 'R' else -self.rotation
 
     @classmethod
-    def parse(cls, text: str) -> Rotation:
+    def factory(cls, text: str) -> Rotation:
         d = text[0]
         r: int = int(text[1:])
         return cls(d, r)
@@ -23,7 +23,7 @@ class Day01(Puzzle):
     """Solution for day 01 (Secret Entrance)"""
 
     def parse_data(self, filename: str) -> Data:
-        return self.read_parsed(filename, Rotation.parse)
+        return self.read_parsed_list(filename, Rotation.factory)
 
     def part1(self, data: Data) -> PuzzleResult:
         dial: int = 50

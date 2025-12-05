@@ -78,6 +78,11 @@ class Puzzle:
         return self.read_blob(filename).strip().split(sep)
 
     def read_parsed(self, filename: str, function: Callable) -> Data:
+        """Read a data file as lines, returning a single object created by function(lines)"""
+        return function(self.read_stripped(filename))
+
+    def read_parsed_list(self, filename: str, function: Callable) -> Data:
+        """Read a data file as lines, returning a list of objects created by function(line)"""
         return list(map(function, self.read_stripped(filename)))
 
     def read_bytes(self, filename: str) -> Data:
@@ -101,6 +106,10 @@ class Puzzle:
 
     # ----- Test runner -------------------------------------------------------
 
+    @staticmethod
+    def data_length(data: Any) -> int:
+        return 1 if not hasattr(data, '__len__') else len(data)
+
     def run(self,
             test1: Optional[PuzzleResult] = None,
             test2: Optional[PuzzleResult] = None,
@@ -118,13 +127,13 @@ class Puzzle:
             self.start()
             self.tests: list[Data] = [self.parse_data(tf) for tf in self.testfiles]
             self.stop()
-            print(f'{self.elapsed_}: parsed test data {[len(t) for t in self.tests]}')
+            print(f'{self.elapsed_}: parsed test data {[self.data_length(t) for t in self.tests]}')
 
             if not self.testonly:
                 self.start()
                 self.data = self.parse_data(self.datafile)
                 self.stop()
-                print(f'{self.elapsed_}: parsed real data [{len(self.data)}]')
+                print(f'{self.elapsed_}: parsed real data [{self.data_length(self.data)}]')
 
             skip: bool = keywords.get('skip', False)
 
