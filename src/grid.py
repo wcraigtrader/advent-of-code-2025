@@ -229,9 +229,8 @@ class Grid(MutableMapping):
     def clear(self) -> None:
         self._grid.clear()
 
-    @property
-    def first(self) -> GridPosition:
-        return list(self._grid.keys())[0]
+    def find(self, value) -> list[GridPosition]:
+        return [key for key, val in self._grid.items() if val == value]
 
     @property
     def rows(self) -> int:

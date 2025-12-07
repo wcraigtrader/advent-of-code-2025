@@ -12,10 +12,11 @@ class Tachyon:
 
     def __init__(self, lines):
         self.manifold = Grid(lines, sparse=True, conversion=Grid.conv_blank('.'))
+        self.start = self.manifold.find('S')[0]
 
     def tachyon_manifold(self) -> int:
         splits = 0
-        queue: deque[GridPosition] = deque([self.manifold.first])
+        queue: deque[GridPosition] = deque([self.start])
         while len(queue):
             next: GridPosition = queue.popleft() + DOWN
             if next in self.manifold and self.manifold[next] == SPLITTER:
@@ -54,7 +55,7 @@ class Tachyon:
             return 1
 
     def quantum_tachyon_manifold(self) -> int:
-        return self.count_paths(self.manifold.first)
+        return self.count_paths(self.start)
 
 
 class Day07(Puzzle):
