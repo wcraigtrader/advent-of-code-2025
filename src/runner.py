@@ -94,6 +94,10 @@ class Puzzle:
         method: Callable = self.get_factory_method(factory)
         return list(map(method, self.read_stripped(filename)))
 
+    def read_factory_lines(self, filename: str, factory: Callable) -> Data:
+        method: Callable = self.get_factory_method(factory)
+        return method(self.read_lines(filename))
+
     def read_bytes(self, filename: str) -> Data:
         with self.open(filename, 'rb') as df:
             return df.read().splitlines()
