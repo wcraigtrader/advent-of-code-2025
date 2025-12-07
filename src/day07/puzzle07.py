@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from common import *
 from collections import deque
 
+from common import *
 
 SPLITTER = '^'
 PATH = '|'
