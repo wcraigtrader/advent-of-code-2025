@@ -59,7 +59,7 @@ class Grid(MutableMapping):
     def __init__(self, source: Optional[list[str] | Grid] = None, **keywords) -> None:
         """
         Grid constructor
-        
+
         :param source: Either a list of strings representing the initial data, or another Grid
         :type source: Optional[list[str] | Grid]
         :param keywords: Modify Grid behavior, as follows:
@@ -92,10 +92,23 @@ class Grid(MutableMapping):
         elif issubclass(source.__class__, Grid):
             for p in self._properties:
                 setattr(self, p, getattr(source, p))
-            self._init(**keywords)
+            # self._init(**keywords)
+            if 'offset' in keywords:
+                self._offset = keywords['offset']
+            if 'sparse' in keywords:
+                self._sparse = keywords['sparse']
+            if 'origin' in keywords:
+                self._origin = keywords['origin']
+            if 'default' in keywords:
+                self._default = keywords['default']
+            if 'dynamic' in keywords:
+                self._dynamic = keywords['dynamic']
             empty: bool = keywords.get('empty', False)
             if not empty:
                 self._grid = source._grid.copy()  # type: ignore
+                if self._dynamic:
+                    for p in ['_min_row', '_max_row', '_min_col', '_max_col']:
+                        setattr(self, p, getattr(source, p))
         elif isinstance(source, list):
             self._init(**keywords)
             self._parse(source, **keywords)
@@ -134,7 +147,7 @@ class Grid(MutableMapping):
                     value = conversion(value)
 
                 if not (self._sparse and value is None):
-                    self._grid[GridPosition(r, c)] = value
+                    self[GridPosition(r, c)] = value
 
     def __repr__(self) -> str:
         return f'{self.__class__.__name__}({self._rows}, {self._cols})'
@@ -194,6 +207,9 @@ class Grid(MutableMapping):
         if len(self._grid) != len(other._grid):
             return False
 
+        if set(self._grid.keys()) != set(other._grid.keys()):
+            return False
+
         return all([v == other._grid[k] for k, v in self._grid.items()])
 
     def __str__(self) -> str:
@@ -212,6 +228,10 @@ class Grid(MutableMapping):
 
     def clear(self) -> None:
         self._grid.clear()
+
+    @property
+    def first(self) -> GridPosition:
+        return list(self._grid.keys())[0]
 
     @property
     def rows(self) -> int:
@@ -249,7 +269,7 @@ class Grid(MutableMapping):
 
     @property
     def operations(self) -> Mapping:
-        return { 'set': self._setop, 'get': self._getop, 'del': self._delop }
+        return {'set': self._setop, 'get': self._getop, 'del': self._delop}
 
     def render(self, value: Any) -> str:
         return ' ' if value is None else str(value)[0]
@@ -265,6 +285,12 @@ class Grid(MutableMapping):
 
     def inbounds(self, position: GridPosition) -> bool:
         return (GridRow(position) in self.row_range and GridCol(position) in self.col_range)
+
+    @staticmethod
+    def conv_blank(blank: str = ' '):
+        def conversion(char: str) -> Any:
+            return None if char == blank else char
+        return conversion
 
 
 __all__: list[str] = [
