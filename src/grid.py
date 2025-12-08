@@ -152,7 +152,9 @@ class Grid(MutableMapping):
     def __repr__(self) -> str:
         return f'{self.__class__.__name__}({self._rows}, {self._cols})'
 
-    def __getitem__(self, key: GridPosition) -> Any:
+    def __getitem__(self, key: GridPosition | tuple[int, int]) -> Any:
+        if isinstance(key, tuple):
+            key = GridPosition(*key)
         if isinstance(key, GridPosition):
             if key in self._grid:
                 self._getop += 1
@@ -164,7 +166,9 @@ class Grid(MutableMapping):
                 raise IndexError
         raise KeyError
 
-    def __setitem__(self, key: GridPosition, value: Any) -> None:
+    def __setitem__(self, key: GridPosition | tuple[int, int], value: Any) -> None:
+        if isinstance(key, tuple):
+            key = GridPosition(*key)
         if isinstance(key, GridPosition):
             self._grid[key] = value
             self._setop += 1
@@ -178,7 +182,9 @@ class Grid(MutableMapping):
             return
         raise KeyError
 
-    def __delitem__(self, key: GridPosition) -> None:
+    def __delitem__(self, key: GridPosition | tuple[int, int]) -> None:
+        if isinstance(key, tuple):
+            key = GridPosition(*key)
         if isinstance(key, GridPosition):
             if key in self._grid:
                 del self._grid[key]
