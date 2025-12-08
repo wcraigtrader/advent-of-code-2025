@@ -4,7 +4,7 @@ from common import *
 
 
 class Day08(Puzzle):
-    """Solution for day 08"""
+    """Solution for day 08 (Playground)"""
 
     def parse_data(self, filename: str) -> Data:
         return self.read_stripped(filename)
