@@ -1,4 +1,4 @@
-My solutions to the Advent of Code 2023 challenge.
+My solutions to the Advent of Code 2025 challenge.
 
 Implementation language is Python 3. My personal goal is to write well-structured, efficient Python 3 code.
 
