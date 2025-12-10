@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-from common import *
-
 import re
+from functools import partial
+from multiprocessing import Pool
+
+from common import *
 
 
 @dataclass
@@ -30,7 +32,19 @@ class Day02(Puzzle):
         data: list[Range] = list(map(Range.factory, self.read_split(filename, ',')))
         return data
 
-    def sum_matches(self, pattern: str, data: Data) -> PuzzleResult:
+    @staticmethod
+    def sum_range(pattern: str, range: Range) -> int:
+        def match(number: int) -> bool:
+            return re.fullmatch(pattern, str(number)) is not None
+        return sum(filter(match, range.range))
+
+    def mp_sum_matches(self, pattern: str, data: Data) -> PuzzleResult:
+        action: partial[int] = partial(self.sum_range, pattern)
+        with Pool() as pool:
+            counts: list[int] = pool.map(action, data)
+        return sum(counts)
+
+    def single_sum_matches(self, pattern: str, data: Data) -> PuzzleResult:
         def match(number: int) -> bool:
             return re.fullmatch(pattern, str(number)) is not None
 
@@ -39,10 +53,10 @@ class Day02(Puzzle):
         return sum([x for mlist in matches for x in mlist])
 
     def part1(self, data: Data) -> PuzzleResult:
-        return self.sum_matches(r'([1-9][0-9]*)(\1)', data)
+        return self.mp_sum_matches(r'([1-9][0-9]*)(\1)', data)
 
     def part2(self, data: Data) -> PuzzleResult:
-        return self.sum_matches(r'([1-9][0-9]*)(\1)+', data)
+        return self.mp_sum_matches(r'([1-9][0-9]*)(\1)+', data)
 
 
 puzzle = Day02()
