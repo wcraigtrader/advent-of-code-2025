@@ -37,10 +37,17 @@ def GridOrthogonalDistance(src: GridPosition, tgt: GridPosition) -> int:
 
 
 def GridDiagonalDistance(src: GridPosition, tgt: GridPosition) -> float:
-    dx = GridCol(tgt) - GridCol(src)
-    dy = GridRow(tgt) - GridRow(src)
-    distance = sqrt(dx*dx + dy*dy)
+    dx: int = GridCol(tgt) - GridCol(src)
+    dy: int = GridRow(tgt) - GridRow(src)
+    distance: float = sqrt(dx*dx + dy*dy)
     return distance
+
+
+def GridArea(src: GridPosition, tgt: GridPosition) -> int:
+    dx: int = abs(GridCol(tgt) - GridCol(src)) + 1
+    dy: int = abs(GridRow(tgt) - GridRow(src)) + 1
+    area: int = dx * dy
+    return area
 
 
 class Grid(MutableMapping):
@@ -219,6 +226,10 @@ class Grid(MutableMapping):
         return all([v == other._grid[k] for k, v in self._grid.items()])
 
     def __str__(self) -> str:
+        return f'{self.__class__.__name__}({self.rows}x{self.cols} => {len(self)})'
+
+    @property
+    def printable(self) -> str:
         rows: range = reversed(self.row_range) if self._origin == 'll' else self.row_range  # type: ignore
         lines: list[str] = [f'{r:3d}: {self.render_row(r)}' for r in rows]
         return '\n'.join(lines)
@@ -304,6 +315,7 @@ __all__: list[str] = [
     "GridDirection",
     "GridDiagonalDistance",
     "GridOrthogonalDistance",
+    "GridArea",
     "GridPosition",
     "GridRow",
     "NORTH",
