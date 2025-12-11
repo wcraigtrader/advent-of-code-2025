@@ -85,16 +85,17 @@ class Puzzle:
             return factory
 
     def read_factory(self, filename: str, factory: Callable) -> Data:
-        """Read a data file as lines, returning a single object created by the factory"""
+        """Read a data file as stripped lines, returning a single object created by the factory"""
         method: Callable = self.get_factory_method(factory)
         return method(self.read_stripped(filename))
 
     def read_factory_list(self, filename: str, factory: Callable) -> Data:
-        """Read a data file as lines, returning a list of objects created by factory"""
+        """Read a data file as stripped lines, returning a list of objects created by factory"""
         method: Callable = self.get_factory_method(factory)
         return list(map(method, self.read_stripped(filename)))
 
     def read_factory_lines(self, filename: str, factory: Callable) -> Data:
+        """Read a data file as bare lines, returning a single object created by the factory"""
         method: Callable = self.get_factory_method(factory)
         return method(self.read_lines(filename))
 
@@ -123,6 +124,12 @@ class Puzzle:
     def data_length(data: Any) -> int:
         return 1 if not hasattr(data, '__len__') else len(data)
 
+    def create_data(self, type: str, filename: str) -> Data:
+        data: Data = self.parse_data(filename)
+        if not isinstance(data, list) and not isinstance(data, str):
+            setattr(data, 'datatype', type)
+        return data
+
     def run(self,
             test1: Optional[PuzzleResult] = None,
             test2: Optional[PuzzleResult] = None,
@@ -138,13 +145,13 @@ class Puzzle:
                 return
 
             self.start()
-            self.tests: list[Data] = [self.parse_data(tf) for tf in self.testfiles]
+            self.tests: list[Data] = [self.create_data('test', tf) for tf in self.testfiles]
             self.stop()
             print(f'{self.elapsed_}: parsed test data {[self.data_length(t) for t in self.tests]}')
 
             if not self.testonly:
                 self.start()
-                self.data = self.parse_data(self.datafile)
+                self.data = self.create_data('real', self.datafile)
                 self.stop()
                 print(f'{self.elapsed_}: parsed real data [{self.data_length(self.data)}]')
 
