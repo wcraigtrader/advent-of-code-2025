@@ -81,12 +81,14 @@ class Day11(Puzzle):
 
     def part2(self, data: Reactor) -> PuzzleResult:
         data.render(self.currentfile, 'svr', 'out', ['dac', 'fft'])
+        return 0
+
         # return data.traverse('svr', ['dac', 'fft'])
 
-        p1 = data.traverse('svr', 'fft')
-        p2 = data.traverse('fft', 'dac')
-        p3 = data.traverse('dac', 'out')
-        return p1 * p2 * p3
+        # p1 = data.traverse('svr', 'fft')
+        # p2 = data.traverse('fft', 'dac')
+        # p3 = data.traverse('dac', 'out')
+        # return p1 * p2 * p3
 
 
 puzzle = Day11('real.data', 'test1.data', 'test2.data')
